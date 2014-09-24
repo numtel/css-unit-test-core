@@ -35,8 +35,14 @@ testAsyncMulti('CssTest - Crud - Create New (Errors)', [
       {title: 'ok', widths: 'sadf', owner: userId},
       {title: 'ok', widths: '1024', interval: 0, owner: userId}
     ];
+    if(Meteor.isServer){
+      var beforeCount = CssTests.find().count();
+    };
     multipleData(test, expect, trials, function(test, data, done){
       ServerObject('CssTest', data, function(error, instance){
+        if(Meteor.isServer){
+          test.equal(CssTests.find().count(), beforeCount);
+        };
         test.equal(instance, undefined);
         test.notEqual(error, undefined);
         if(error){
@@ -67,8 +73,8 @@ testAsyncMulti('CssTest - Crud - Load from Id', [
         test.equal(val, instance[key]);
       });
 
+      // Clean up
       instance.remove();
-      firstInstance.remove();
     });
 
     ServerObject('CssTest', newTest, firstCallback);
@@ -142,7 +148,10 @@ testAsyncMulti('CssTest - Crud - Update', [
             test.notEqual(instance.nextRun, undefined);
           }
         };
+
+        // Clean up
         instance.remove();
+
         done();
       };
       ServerObject('CssTest', newTest, instanceCallback);
@@ -175,6 +184,9 @@ testAsyncMulti('CssTest - Crud - Update (Errors)', [
           test.equal(error.error, 406);
         };
         test.isUndefined(result);
+
+        // Clean up
+        instance.remove();
         done();
       };
       ServerObject('CssTest', newTest, instanceCallback);
@@ -185,6 +197,9 @@ testAsyncMulti('CssTest - Crud - Update (Errors)', [
 testAsyncMulti('CssTest - Crud - Remove', [
   function(test, expect){
     var instance;
+    if(Meteor.isServer){
+      var beforeCount = CssTests.find().count();
+    };
     var instanceCallback = function(error, result){
       instance = result;
       test.isFalse(error);
@@ -202,6 +217,9 @@ testAsyncMulti('CssTest - Crud - Remove', [
     };
 
     var removeCallback = expect(function(error, result){
+      if(Meteor.isServer){
+        test.equal(CssTests.find().count(), beforeCount);
+      };
       test.isFalse(error);
       test.equal(instance.title, undefined);
     });

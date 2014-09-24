@@ -26,7 +26,7 @@ Package.onTest(function(api) {
   api.use('tinytest');
   api.use('test-helpers');
   api.addFiles('more-test-helpers.js');
-  api.use('numtel:serverobject@0.0.7');
+  api.use('numtel:serverobject@0.0.8');
   packageContents(api);
   api.addFiles('test-init.js');
   api.addFiles('csstest-tests.js');

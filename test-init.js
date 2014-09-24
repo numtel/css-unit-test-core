@@ -10,9 +10,14 @@ if(Meteor.isServer){
   ServerObject.allow({
     'CssTest': {
       ref: CssTest,
-      where: function(){
-        // Only allow client to load tests that it owns
-        return this.owner === userId;
+      allowConstructor: function(args){
+        // If creating new, owner must be set to userId
+        if(args.length > 0 && 
+           typeof args[0] === 'object' && 
+           args[0].owner !== userId){
+          return false;
+        };
+        return true;
       }
     }
   });
