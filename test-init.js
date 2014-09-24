@@ -1,4 +1,4 @@
-var userId = 'mr.big';
+userId = 'mr.big';
 
 newTest = {
   title: 'Test Case',

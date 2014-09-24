@@ -31,15 +31,17 @@ testAsyncMulti('CssTest - Crud - Create New', [
 testAsyncMulti('CssTest - Crud - Create New (Errors)', [
   function(test, expect){
     var trials = [
-      {title: '', widths: '1024'},
-      {title: 'ok', widths: 'sadf'},
-      {title: 'ok', widths: '1024', interval: 0}
+      {title: '', widths: '1024', owner: userId},
+      {title: 'ok', widths: 'sadf', owner: userId},
+      {title: 'ok', widths: '1024', interval: 0, owner: userId}
     ];
     multipleData(test, expect, trials, function(test, data, done){
       ServerObject('CssTest', data, function(error, instance){
-        test.notEqual(error, undefined);
-        test.equal(error.error, 406);
         test.equal(instance, undefined);
+        test.notEqual(error, undefined);
+        if(error){
+          test.equal(error.error, 406);
+        };
         done();
       });
     });
@@ -156,7 +158,9 @@ testAsyncMulti('CssTest - Crud - Update (Errors)', [
 
       var updateCallback = function(error, result){
         test.notEqual(error, undefined);
-        test.equal(error.error, 406);
+        if(error){
+          test.equal(error.error, 406);
+        };
         test.isUndefined(result);
         done();
       };
