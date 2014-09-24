@@ -85,7 +85,6 @@ var validatePost = function(data, isCreate){
     return 'Post error!';
   };
   if(!isCreate){
-    fieldDefs['_id'] = ['ID', 'string', {min:1, max:100}];
     // Modifying a test, ensure that each passed value matches
     _.each(data, function(value, key){
       var result = validate(key, value);
@@ -93,7 +92,6 @@ var validatePost = function(data, isCreate){
         throw new Meteor.Error(406, result);
       };
     });
-    delete fieldDefs['_id'];
   }else{
     // Creating a test, make sure every field validates
     _.each(fieldDefs, function(options, key){
@@ -127,6 +125,7 @@ CssTest.prototype.remove = function(){
 };
 
 CssTest.prototype.update = function(data){
+  var that = this;
   validatePost(data);
 
   // Require new normative if these fields change

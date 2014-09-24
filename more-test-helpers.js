@@ -12,7 +12,7 @@ multipleData = function(test, expect, data, f){
     };
   };
   data.forEach(function(current){
-    f.call(context, test, data, done);
+    f.call(context, test, current, done);
   });
 };
 

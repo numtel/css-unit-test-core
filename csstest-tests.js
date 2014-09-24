@@ -1,19 +1,164 @@
-var userId = 'mr.big';
 
-newTest = {
-  title: 'Test Case',
-  widths: '1024,720',
-  owner: userId
-};
+testAsyncMulti('CssTest - Crud - Create New', [
+  function(test, expect){
+    var instanceCallback = expect(function(error, instance){
+      test.isFalse(error);
+      // Ensure properties are set on instance
+      _.each(newTest, function(val, key){
+        test.equal(val, instance[key]);
+      });
 
-if(Meteor.isServer){
-  ServerObject.allow({
-    'CssTest': {
-      ref: CssTest,
-      where: function(){
-        // Only allow client to load tests that it owns
-        return this.owner === userId;
-      }
-    }
-  });
-};
+      // widthsArray population
+      test.equal(instance.widthsArray.length, 2);
+      test.equal(instance.widthsArray[0], 1024);
+      test.equal(instance.widthsArray[1], 720);
+
+      if(Meteor.isServer){
+        var doc = CssTests.findOne(instance._id);
+        _.each(newTest, function(val, key){
+          test.equal(val, doc[key]);
+        });
+      };
+
+      // Clean up
+      instance.remove();
+    });
+
+    ServerObject('CssTest', newTest, instanceCallback);
+  }
+]);
+
+testAsyncMulti('CssTest - Crud - Remove', [
+  function(test, expect){
+    var instance;
+    var instanceCallback = function(error, result){
+      instance = result;
+      test.isFalse(error);
+
+      instance.remove(removeCallback);
+
+      if(Meteor.isServer){
+        var doc = CssTests.findOne(instance._id);
+        test.equal(doc, undefined);
+      };
+    };
+
+    var removeCallback = expect(function(error, result){
+      test.isFalse(error);
+      test.equal(instance.title, undefined);
+    });
+
+    ServerObject('CssTest', newTest, instanceCallback);
+  }
+]);
+
+testAsyncMulti('CssTest - Crud - Load from Id', [
+  function(test, expect){
+    var firstInstance;
+    var firstCallback = function(error, instance){
+      test.isFalse(error);
+      firstInstance = instance;
+      ServerObject('CssTest', instance._id, secondCallback);
+    };
+
+    var secondCallback = expect(function(error, instance){
+      test.isFalse(error);
+      _.each(newTest, function(val, key){
+        test.equal(val, instance[key]);
+      });
+
+      instance.remove();
+      firstInstance.remove();
+    });
+
+    ServerObject('CssTest', newTest, firstCallback);
+  }
+]);
+
+testAsyncMulti('CssTest - Crud - Invalid id', [
+  function(test, expect){
+    ServerObject('CssTest', 'invalidid', expect(function(error, instance){
+      test.notEqual(error, undefined);
+      test.equal(error.error, 404);
+      test.equal(instance, undefined);
+    }));
+  }
+]);
+
+testAsyncMulti('CssTest - Crud - Bad Data', [
+  function(test, expect){
+    var trials = [
+      {title: '', widths: '1024'},
+      {title: 'ok', widths: 'sadf'},
+      {title: 'ok', widths: '1024', interval: 0}
+    ];
+    multipleData(test, expect, trials, function(test, data, done){
+      ServerObject('CssTest', data, function(error, instance){
+        test.notEqual(error, undefined);
+        test.equal(error.error, 406);
+        test.equal(instance, undefined);
+        done();
+      });
+    });
+  }
+]);
+
+testAsyncMulti('CssTest - Crud - Update', [
+  function(test, expect){
+    var trials = [
+      {title: 'Cowabunga', description: 'Babaganoush'},
+      {cssFiles: 'http://test2.com/test.css\nhttp://test3.com/sample1.css'},
+      {interval: '', widths: '234,1290'},
+      {interval: '4'}
+    ];
+    multipleData(test, expect, trials, function(test, data, done){
+      var instance;
+      var instanceCallback = function(error, result){
+        test.isFalse(error);
+        instance = result;
+        // Special Case: Must set nextRun in order to test that it is cleared
+        if(data.interval === ''){
+          instance.nextRun = 21093129;
+        };
+        instance.update(data, updateCallback);
+      };
+
+      var updateCallback = function(error, result){
+        test.isFalse(error);
+
+        // Check that data updates
+        _.each(data, function(val, key){
+          test.equal(instance[key], val);
+        });
+
+        // Check that widthsArray updates
+        if(data.widths !== undefined){
+          var expectedWidthsArray = data.widths.split(',').map(function(width){
+            return parseInt(width.trim(), 10);
+          });
+          test.equal(_.difference(instance.widthsArray, expectedWidthsArray).length, 0);
+        };
+
+        // Check that hasNormative updates with select fields
+        var updateNormative = ['widths'];
+        updateNormative.forEach(function(updateField){
+          if(data[updateField] !== undefined &&
+             data[updateField] !== newTest[updateField]){
+            test.equal(instance.hasNormative, false)
+          };
+        });
+
+        // Check nextRun interval
+        if(data.interval !== undefined){
+          if(data.interval === ''){
+            test.equal(instance.nextRun, undefined);
+          }else{
+            test.notEqual(instance.nextRun, undefined);
+          }
+        };
+        done();
+      };
+      ServerObject('CssTest', newTest, instanceCallback);
+    });
+  }
+]);

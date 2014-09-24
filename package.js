@@ -1,11 +1,12 @@
 Package.describe({
   summary: "Css Unit Test Core Package",
   version: "0.0.1",
-  git: "https://github.com/numtel/css-unit-test.git"
+  git: "https://github.com/numtel/css-unit-test-core.git"
 });
 
 var packageContents = function(api){
   api.use('underscore');
+  api.use('gadicohen:phantomjs@0.0.2');
   api.addFiles('model.js');
   api.export('CssTests');
   api.export('CssNormatives', 'server');
@@ -27,7 +28,6 @@ Package.onTest(function(api) {
   api.addFiles('more-test-helpers.js');
   api.use('numtel:serverobject@0.0.5');
   packageContents(api);
+  api.addFiles('test-init.js');
   api.addFiles('csstest-tests.js');
-  api.addFiles('csstest-tests-construct.js');
-  api.addFiles('csstest-tests-update.js');
 });
