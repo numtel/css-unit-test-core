@@ -28,27 +28,21 @@ testAsyncMulti('CssTest - Crud - Create New', [
   }
 ]);
 
-testAsyncMulti('CssTest - Crud - Remove', [
+testAsyncMulti('CssTest - Crud - Create New (Errors)', [
   function(test, expect){
-    var instance;
-    var instanceCallback = function(error, result){
-      instance = result;
-      test.isFalse(error);
-
-      instance.remove(removeCallback);
-
-      if(Meteor.isServer){
-        var doc = CssTests.findOne(instance._id);
-        test.equal(doc, undefined);
-      };
-    };
-
-    var removeCallback = expect(function(error, result){
-      test.isFalse(error);
-      test.equal(instance.title, undefined);
+    var trials = [
+      {title: '', widths: '1024'},
+      {title: 'ok', widths: 'sadf'},
+      {title: 'ok', widths: '1024', interval: 0}
+    ];
+    multipleData(test, expect, trials, function(test, data, done){
+      ServerObject('CssTest', data, function(error, instance){
+        test.notEqual(error, undefined);
+        test.equal(error.error, 406);
+        test.equal(instance, undefined);
+        done();
+      });
     });
-
-    ServerObject('CssTest', newTest, instanceCallback);
   }
 ]);
 
@@ -75,31 +69,13 @@ testAsyncMulti('CssTest - Crud - Load from Id', [
   }
 ]);
 
-testAsyncMulti('CssTest - Crud - Invalid id', [
+testAsyncMulti('CssTest - Crud - Load from Id (Error)', [
   function(test, expect){
     ServerObject('CssTest', 'invalidid', expect(function(error, instance){
       test.notEqual(error, undefined);
       test.equal(error.error, 404);
       test.equal(instance, undefined);
     }));
-  }
-]);
-
-testAsyncMulti('CssTest - Crud - Bad Data', [
-  function(test, expect){
-    var trials = [
-      {title: '', widths: '1024'},
-      {title: 'ok', widths: 'sadf'},
-      {title: 'ok', widths: '1024', interval: 0}
-    ];
-    multipleData(test, expect, trials, function(test, data, done){
-      ServerObject('CssTest', data, function(error, instance){
-        test.notEqual(error, undefined);
-        test.equal(error.error, 406);
-        test.equal(instance, undefined);
-        done();
-      });
-    });
   }
 ]);
 
@@ -160,5 +136,55 @@ testAsyncMulti('CssTest - Crud - Update', [
       };
       ServerObject('CssTest', newTest, instanceCallback);
     });
+  }
+]);
+
+testAsyncMulti('CssTest - Crud - Update (Errors)', [
+  function(test, expect){
+    var trials = [
+      {title: ''},
+      {interval: '0'},
+      {widths: '234ia,1290'}
+    ];
+    multipleData(test, expect, trials, function(test, data, done){
+      var instance;
+      var instanceCallback = function(error, result){
+        test.isFalse(error);
+        instance = result;
+        instance.update(data, updateCallback);
+      };
+
+      var updateCallback = function(error, result){
+        test.notEqual(error, undefined);
+        test.equal(error.error, 406);
+        test.isUndefined(result);
+        done();
+      };
+      ServerObject('CssTest', newTest, instanceCallback);
+    });
+  }
+]);
+
+testAsyncMulti('CssTest - Crud - Remove', [
+  function(test, expect){
+    var instance;
+    var instanceCallback = function(error, result){
+      instance = result;
+      test.isFalse(error);
+
+      instance.remove(removeCallback);
+
+      if(Meteor.isServer){
+        var doc = CssTests.findOne(instance._id);
+        test.equal(doc, undefined);
+      };
+    };
+
+    var removeCallback = expect(function(error, result){
+      test.isFalse(error);
+      test.equal(instance.title, undefined);
+    });
+
+    ServerObject('CssTest', newTest, instanceCallback);
   }
 ]);
