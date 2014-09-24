@@ -54,7 +54,11 @@ testAsyncMulti('CssTest - Crud - Load from Id', [
     var firstCallback = function(error, instance){
       test.isFalse(error);
       firstInstance = instance;
-      ServerObject('CssTest', instance._id, secondCallback);
+      if(instance){
+        ServerObject('CssTest', instance._id, secondCallback);
+      }else{
+        secondCallback(error, undefined);
+      };
     };
 
     var secondCallback = expect(function(error, instance){
@@ -94,6 +98,10 @@ testAsyncMulti('CssTest - Crud - Update', [
       var instanceCallback = function(error, result){
         test.isFalse(error);
         instance = result;
+        if(!instance){
+          done();
+          return;
+        };
         // Special Case: Must set nextRun in order to test that it is cleared
         if(data.interval === ''){
           instance.nextRun = 21093129;
@@ -134,6 +142,7 @@ testAsyncMulti('CssTest - Crud - Update', [
             test.notEqual(instance.nextRun, undefined);
           }
         };
+        instance.remove();
         done();
       };
       ServerObject('CssTest', newTest, instanceCallback);
@@ -153,6 +162,10 @@ testAsyncMulti('CssTest - Crud - Update (Errors)', [
       var instanceCallback = function(error, result){
         test.isFalse(error);
         instance = result;
+        if(!instance){
+          done();
+          return;
+        };
         instance.update(data, updateCallback);
       };
 
@@ -176,7 +189,11 @@ testAsyncMulti('CssTest - Crud - Remove', [
       instance = result;
       test.isFalse(error);
 
-      instance.remove(removeCallback);
+      if(instance){
+        instance.remove(removeCallback);
+      }else{
+        removeCallback(error);
+      };
 
       if(Meteor.isServer){
         var doc = CssTests.findOne(instance._id);
