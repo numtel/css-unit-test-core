@@ -8,6 +8,7 @@ if(Meteor.isClient){
 };
 
 if(Meteor.isServer){
+
   CssTests.allow({
     insert: function (userId, test) {
       return false; // contruct new CssTest({}) instead

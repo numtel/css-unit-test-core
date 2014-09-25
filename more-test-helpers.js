@@ -1,5 +1,6 @@
 // Test Helper - Feed multiple different data objects into one function
-//               function(test, data, done){...}
+//               from within a testAsyncMulti([]) helper
+//               f = function(test, data, done){...}
 //               Call done() when complete. 
 multipleData = function(test, expect, data, f){
   var context = this;

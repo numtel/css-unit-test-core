@@ -7,6 +7,15 @@ Package.describe({
 var packageContents = function(api){
   api.use('underscore');
   api.use('gadicohen:phantomjs@0.0.2');
+
+  api.addFiles('assetKey.js', 'server', {isAsset: true});
+  api.addFiles('assetKey.js', 'server');
+  api.export('assetDir', 'server');
+
+  api.addFiles('phantom-extractStyles.js', 'server', {isAsset: true});
+  api.addFiles('phantom-getSheetsFromUrl.js', 'server', {isAsset: true});
+  api.addFiles('phantom-render.js', 'server', {isAsset: true});
+
   api.addFiles('model.js');
   api.export('CssTests');
   api.export('CssNormatives', 'server');
