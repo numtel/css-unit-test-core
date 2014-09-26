@@ -40,7 +40,7 @@ var fieldDefs = {
   remoteStyles: ['Remote Styles', 'string', {min:0, max:1000}],
   cssFiles: ['CSS Files', 'string', {min:0, max: 10000}],
   testURL: ['Test URL', 'string', {min:0, max:1000}],
-  fixtureHTML: ['Fixture HTML', 'string', {min: 0, max: 100000}],
+  fixtureHtml: ['Fixture HTML', 'string', {min: 0, max: 100000}],
   widths: ['Test Resolution Widths', 'integerList', {}]
 };
 

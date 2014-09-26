@@ -9,7 +9,6 @@
 // Package.onUse(function(api) {
 //   api.addFiles('assetKey.js', 'server', {isAsset: true});
 //   api.addFiles('assetKey.js', 'server');
-//   api.export('assetDir', 'server');
 // });
 
 var assetKey = '9a0jefioal0394jifkalr09324iojeklfm29rj3iowe';

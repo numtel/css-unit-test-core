@@ -10,12 +10,12 @@ var packageContents = function(api){
 
   api.addFiles('assetKey.js', 'server', {isAsset: true});
   api.addFiles('assetKey.js', 'server');
-  api.export('assetDir', 'server');
 
   api.addFiles('phantom-extractStyles.js', 'server', {isAsset: true});
   api.addFiles('phantom-getSheetsFromUrl.js', 'server', {isAsset: true});
   api.addFiles('phantom-render.js', 'server', {isAsset: true});
 
+  api.addFiles('util.js', 'server');
   api.addFiles('model.js');
   api.export('CssTests');
   api.export('CssNormatives', 'server');
@@ -24,6 +24,9 @@ var packageContents = function(api){
   api.export('CssHistoryHandle', 'client');
   api.addFiles('csstest.js', 'server');
   api.export('CssTest', 'server');
+
+  api.addFiles('getHtml.js', 'server');
+
 };
 
 Package.onUse(function(api) {
@@ -39,4 +42,5 @@ Package.onTest(function(api) {
   packageContents(api);
   api.addFiles('test-init.js');
   api.addFiles('csstest-tests.js');
+  api.addFiles('getHtml-tests.js');
 });

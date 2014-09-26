@@ -3,7 +3,9 @@ userId = 'mr.big';
 newTest = {
   title: 'Test Case',
   widths: '1024,720',
-  owner: userId
+  owner: userId,
+  cssFiles: 'http:/test.com/test.css',
+  fixtureHtml: '<h1>Test html</h1>'
 };
 
 if(Meteor.isServer){
