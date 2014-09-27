@@ -23,4 +23,12 @@ if(Meteor.isServer){
       }
     }
   });
+
+
+  // The client may want to know the asset directory
+  Meteor.methods({
+    'CssTest/assetDir': function(){
+      return assetDir;
+    }
+  });
 };

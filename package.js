@@ -40,6 +40,10 @@ Package.onTest(function(api) {
   api.addFiles('more-test-helpers.js');
   api.use('numtel:serverobject@0.0.8');
   packageContents(api);
+
+  api.addFiles('csstest-mockup.html', 'client', {isAsset: true});
+  api.addFiles('csstest-mockup.css', 'client', {isAsset: true});
+
   api.addFiles('test-init.js');
   api.addFiles('csstest-tests.js');
   api.addFiles('getHtml-tests.js');

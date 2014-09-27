@@ -129,3 +129,73 @@ testAsyncMulti('CssTest - getHtml - Multiple Trials', [
     });
   }
 ]);
+
+if(Meteor.isClient){
+  testAsyncMulti('CssTest - getHtml - remoteStyles (Client)', [
+    // Must run on client to determine hosted url
+    // If it works on the client, it obviously worked on the server
+    function(test, expect){
+      var testData = _.clone(newTest);
+      // assetDir is only available on the server, except with method
+      Meteor.call('CssTest/assetDir', function(error, result){
+        // Slice off leading 'assets/' not required for client
+        var assetDir = result.substr(7);
+
+        // Prepare new test with remoteStyles
+        testData.remoteStyles = document.location.origin +
+                                document.location.pathname +
+                                assetDir +
+                                'csstest-mockup.html';
+        testData.testUrl = testData.remoteStyles;
+        testData.cssFiles = '';
+
+        ServerObject('CssTest', testData, instanceCallback);
+      });
+
+      var instance;
+      var instanceCallback = function(error, result){
+        test.isFalse(error);
+        if(error){
+          done();
+          return;
+        };
+        instance = result;
+        instance.getHtml({}, getHtmlCallback);
+      };
+      var getHtmlCallback = expect(function(error, result){
+        // Should have csstest-mockup.css link
+        test.notEqual(result.indexOf('csstest-mockup.css'), -1);
+        // Should have <base> tag
+        test.notEqual(result.indexOf('<base href="' + testData.testUrl +'">'), -1);
+      });
+
+    }
+  ]);
+};
+
+testAsyncMulti('CssTest - getHtml - remoteStyles (Error)', [
+  function(test, expect){
+    var instance;
+    var instanceCallback = function(error, result){
+      test.isFalse(error);
+      if(error){
+        done();
+        return;
+      };
+      instance = result;
+      instance.getHtml({}, getHtmlCallback);
+    };
+    var getHtmlCallback = expect(function(error, result){
+      test.isTrue(error);
+      test.isUndefined(result);
+      test.equal(error.error, 400);
+    });
+
+    // Prepare new test with remoteStyles
+    var testData = _.clone(newTest);
+    testData.remoteStyles = 'notaurl';
+    testData.cssFiles = '';
+
+    ServerObject('CssTest', testData, instanceCallback);
+  }
+]);

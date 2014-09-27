@@ -39,7 +39,7 @@ var fieldDefs = {
   interval: ['Schedule Interval', 'integer', {optional: true, min:1}],
   remoteStyles: ['Remote Styles', 'string', {min:0, max:1000}],
   cssFiles: ['CSS Files', 'string', {min:0, max: 10000}],
-  testURL: ['Test URL', 'string', {min:0, max:1000}],
+  testUrl: ['Test URL', 'string', {min:0, max:1000}],
   fixtureHtml: ['Fixture HTML', 'string', {min: 0, max: 100000}],
   widths: ['Test Resolution Widths', 'integerList', {}]
 };

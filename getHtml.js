@@ -34,7 +34,11 @@ CssTest.prototype.getHtml = function(options){
   if(options.normativeValue === undefined){
     // Styles are coming normally
     if(this.remoteStyles){
-      styleSheets += phantomExec('phantom-getSheetsFromUrl.js', [url]);
+      var remoteSheets = phantomExec('phantom-getSheetsFromUrl.js', [this.remoteStyles]);
+      if(remoteSheets.substr(0,9) === '##ERROR##'){
+        throw new Meteor.Error(400, 'Error loading style sheets from remote URL.');
+      };
+      styleSheets += remoteSheets;
     };
     that.cssFiles.split('\n').forEach(function(href){
       if(href.trim() !== ''){
@@ -51,7 +55,7 @@ CssTest.prototype.getHtml = function(options){
   var head = [
    '<head>',
    styleSheets,
-   (that.remoteStyles ? '<base href="' + that.remoteStyles +'">' : ''),
+   (this.testUrl ? '<base href="' + this.testUrl +'">' : ''),
    '<style>',
    '.steez-highlight-failure { outline: 2px solid #ff0 !important; }',
    '</style>',

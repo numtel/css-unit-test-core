@@ -13,7 +13,10 @@ flattenArray = function(a){
   return a.concat(b);
 };
 
-phantomExec = function(filename, args){  
+phantomExec = function(filename, args){
+  // Run phantomjs with a file in the asset directory using the specified
+  // args array.
+  // Returns stdout or throws Meteor.Error()
   var fut = new Future();
   var phantomjs = Npm.require('phantomjs');
   var shell = Npm.require('child_process');
@@ -21,16 +24,16 @@ phantomExec = function(filename, args){
   var command = shell.spawn(phantomjs.path, args);
 
   command.stdout.on('data', function(data){
-    fut.return(data);
+    fut.return(String(data));
   });
 
   command.stderr.on('data', function(data){
-    fut.throw(new Meteor.Error(500, data));
+    fut.throw(new Meteor.Error(500, String(data)));
   });
 
   command.on('exit', function(code) {
     if(!fut.isResolved()){
-      fut.throw(new Meteor.Error(500, 'PhantomJS Error'));
+      fut.throw(new Meteor.Error(500, 'PhantomJS Error: ' + code));
     };
   });
   return fut.wait();
