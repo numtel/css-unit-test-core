@@ -77,6 +77,7 @@ testAsyncMulti('CssTest - getHtml - Multiple Trials', [
       var getHtmlCallback = function(error, result){
         test.isFalse(error);
         if(error){
+          instance.remove()
           done();
           return;
         };
@@ -167,6 +168,8 @@ if(Meteor.isClient){
         test.notEqual(result.indexOf('csstest-mockup.css'), -1);
         // Should have <base> tag
         test.notEqual(result.indexOf('<base href="' + testData.testUrl +'">'), -1);
+        // Clean up
+        instance.remove()
       });
 
     }
@@ -189,6 +192,8 @@ testAsyncMulti('CssTest - getHtml - remoteStyles (Error)', [
       test.isTrue(error);
       test.isUndefined(result);
       test.equal(error.error, 400);
+      // Clean up
+      instance.remove()
     });
 
     // Prepare new test with remoteStyles

@@ -26,6 +26,7 @@ var packageContents = function(api){
   api.export('CssTest', 'server');
 
   api.addFiles('getHtml.js', 'server');
+  api.addFiles('extractStyles.js', 'server');
 
 };
 
@@ -47,4 +48,6 @@ Package.onTest(function(api) {
   api.addFiles('test-init.js');
   api.addFiles('csstest-tests.js');
   api.addFiles('getHtml-tests.js');
+  api.addFiles('extractStyles-tests-expected.js');
+  api.addFiles('extractStyles-tests.js');
 });

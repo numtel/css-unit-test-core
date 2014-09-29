@@ -4,8 +4,10 @@ newTest = {
   title: 'Test Case',
   widths: '1024,720',
   owner: userId,
+  // cssFiles/remoteStyles manipulated by the individual tests typically
   cssFiles: 'http:/test.com/test.css',
-  fixtureHtml: '<h1>Test html</h1>'
+  // fixtureHtml should include a nested element to test children in extractStyles
+  fixtureHtml: '<h1>Test <em>html</em></h1>'
 };
 
 if(Meteor.isServer){

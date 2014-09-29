@@ -23,18 +23,24 @@ phantomExec = function(filename, args){
   args.unshift(assetDir + filename);
   var command = shell.spawn(phantomjs.path, args);
 
-  command.stdout.on('data', function(data){
-    fut.return(String(data));
-  });
-
-  command.stderr.on('data', function(data){
-    fut.throw(new Meteor.Error(500, String(data)));
-  });
-
-  command.on('exit', function(code) {
+  command.stdout.on('data', Meteor.bindEnvironment(function(data){
     if(!fut.isResolved()){
-      fut.throw(new Meteor.Error(500, 'PhantomJS Error: ' + code));
+      fut.return(String(data));
     };
-  });
+  }));
+
+  command.stderr.on('data', Meteor.bindEnvironment(function(data){
+    if(!fut.isResolved()){
+      fut.throw(new Meteor.Error(500, String(data)));
+    };
+  }));
+
+  command.on('exit', Meteor.bindEnvironment(function(code) {
+    Meteor.setTimeout(function(){
+      if(!fut.isResolved()){
+        fut.throw(new Meteor.Error(500, 'PhantomJS Error: ' + code));
+      };
+    }, 100);
+  }));
   return fut.wait();
 };
