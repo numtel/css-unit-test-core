@@ -30,7 +30,6 @@ if(Meteor.isClient){
       var instanceCallback = function(error, result){
         test.isFalse(error);
         if(error){
-          done();
           return;
         };
         instance = result;
@@ -57,7 +56,6 @@ if(Meteor.isServer){
       var instanceCallback = function(error, result){
         test.isFalse(error);
         if(error){
-          done();
           return;
         };
         instance = result;
@@ -76,7 +74,7 @@ if(Meteor.isServer){
         var htmlFile = 'test-' + instance._id + '.html';
         test.isFalse(fs.existsSync(htmlFile));
         // Clean up
-        instance.remove()
+        instance.remove();
       });
 
       var testData = _.clone(newTest);

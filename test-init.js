@@ -17,8 +17,9 @@ if(Meteor.isServer){
       allowConstructor: function(args){
         // If creating new, owner must be set to userId
         if(args.length > 0 && 
-           typeof args[0] === 'object' && 
-           args[0].owner !== userId){
+           (args[0] == null || 
+             (typeof args[0] === 'object' && 
+             args[0].owner !== userId))){
           return false;
         };
         return true;

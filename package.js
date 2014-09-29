@@ -26,6 +26,7 @@ var packageContents = function(api){
   api.export('CssTest', 'server');
 
   api.addFiles('getHtml.js', 'server');
+  api.addFiles('getThumbnail.js', 'server');
   api.addFiles('extractStyles.js', 'server');
 
 };
@@ -39,7 +40,7 @@ Package.onTest(function(api) {
   api.use('tinytest');
   api.use('test-helpers');
   api.addFiles('more-test-helpers.js');
-  api.use('numtel:serverobject@0.0.8');
+  api.use('numtel:serverobject@0.0.11');
   packageContents(api);
 
   api.addFiles('csstest-mockup.html', 'client', {isAsset: true});
@@ -48,6 +49,7 @@ Package.onTest(function(api) {
   api.addFiles('test-init.js');
   api.addFiles('csstest-tests.js');
   api.addFiles('getHtml-tests.js');
+  api.addFiles('getThumbnail-tests.js');
   api.addFiles('extractStyles-tests-expected.js');
   api.addFiles('extractStyles-tests.js');
 });

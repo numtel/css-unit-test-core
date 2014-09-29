@@ -124,10 +124,15 @@ CssTest.prototype.remove = function(){
   this.prototype = {};
 };
 
+// Public update function (includes field validation)
 CssTest.prototype.update = function(data){
-  var that = this;
   validatePost(data);
+  this._update(data);
+};
 
+// Private update function
+CssTest.prototype._update = function(data){
+  var that = this;
   // Require new normative if these fields change
   ['widths'].forEach(function(field){
     if(data[field] !== undefined && data[field] !== that[field]){
