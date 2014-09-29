@@ -15,7 +15,6 @@ testAsyncMulti('CssTest - Crud - Create New', [
 
       if(Meteor.isServer){
         var doc = CssTests.findOne(instance._id);
-        console.log(doc, instance);
         _.each(newTest, function(val, key){
           test.equal(val, doc[key]);
         });

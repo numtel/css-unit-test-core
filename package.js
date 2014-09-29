@@ -49,6 +49,7 @@ Package.onTest(function(api) {
   api.addFiles('test-init.js');
   api.addFiles('csstest-tests.js');
   api.addFiles('getHtml-tests.js');
+  api.addFiles('getThumbnail-tests-expected.js');
   api.addFiles('getThumbnail-tests.js');
   api.addFiles('extractStyles-tests-expected.js');
   api.addFiles('extractStyles-tests.js');

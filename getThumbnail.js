@@ -16,7 +16,7 @@ CssTest.prototype.getThumbnail = function(options){
   };
 
   // Render new image
-  var htmlFile = 'test-' + this._id + '.html';
+  var htmlFile = 'testThumbnail-' + this._id + '.html';
   fs.writeFile(htmlFile, this.getHtml(), Meteor.bindEnvironment(function(err) {
     if(err){
       fut.throw(new Meteor.Error(500, 'Error writing HTML file'));
@@ -25,8 +25,9 @@ CssTest.prototype.getThumbnail = function(options){
       try{
         result = phantomExec('phantom-render.js',
           [htmlFile, that.widthsArray[0], options.width, options.height]);
+        result = String(result.trim());
         if(typeof result === 'string' && result.substr(0,10) !== 'data:image'){
-          throw result.trim();
+          throw result;
         };
         var updates = {};
         updates[thumbKey] = result;

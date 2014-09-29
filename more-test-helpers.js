@@ -2,6 +2,7 @@
 //               from within a testAsyncMulti([]) helper
 //               f = function(test, data, done){...}
 //               Call done() when complete. 
+//               Trials run sequentially
 multipleData = function(test, expect, data, f){
   var context = this;
   var returnCount = 0;
@@ -10,10 +11,10 @@ multipleData = function(test, expect, data, f){
     returnCount++;
     if(returnCount === data.length){
       allDone();
+    }else{
+      f.call(context, test, data[returnCount], done);
     };
   };
-  data.forEach(function(current){
-    f.call(context, test, current, done);
-  });
+  f.call(context, test, data[returnCount], done);
 };
 
