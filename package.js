@@ -28,6 +28,7 @@ var packageContents = function(api){
   api.addFiles('getHtml.js', 'server');
   api.addFiles('getThumbnail.js', 'server');
   api.addFiles('extractStyles.js', 'server');
+  api.addFiles('setNormative.js', 'server');
 
 };
 
@@ -53,4 +54,5 @@ Package.onTest(function(api) {
   api.addFiles('getThumbnail-tests.js');
   api.addFiles('extractStyles-tests-expected.js');
   api.addFiles('extractStyles-tests.js');
+  api.addFiles('setNormative-tests.js');
 });

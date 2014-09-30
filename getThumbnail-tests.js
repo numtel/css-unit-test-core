@@ -8,6 +8,8 @@ if(Meteor.isClient){
         {options: undefined, expected: 'default'},
         // Loading same size again should come from the cache very quickly
         {options: undefined, expected: 'default', maxTime: 20},
+        // Forced refresh should be slow
+        {options: {forceRefresh: true}, expected: 'default', minTime: 100},
         // Large image should return longer result
         {options: {width: 1000, height: 1000}, expected: 'large', last: true}
       ];
@@ -25,6 +27,9 @@ if(Meteor.isClient){
           };
           if(data.maxTime){
             test.isTrue(Date.now()-lastTime<data.maxTime);
+          };
+          if(data.minTime){
+            test.isTrue(Date.now()-lastTime>data.minTime);
           };
           lastTime = Date.now();
           done();
@@ -79,13 +84,13 @@ if(Meteor.isServer){
         instance = result;
         instance.getThumbnail(getThumbnailCallback);
       };
-      var getThumbnailCallback = expect(function(error, result){
+      var getThumbnailCallback = function(error, result){
         test.isUndefined(result);
         test.isTrue(error);
         test.equal(error.error, 400);
         // Allow 50 ms for file deletion to complete
         Meteor.setTimeout(bufferDeleteCheck, 50);
-      });
+      };
 
       var bufferDeleteCheck = expect(function(){
         var fs = Npm.require('fs');

@@ -5,13 +5,14 @@ CssTest.prototype.getThumbnail = function(options){
 
   options = _.defaults(options || {}, {
     width: 240,
-    height: 180
+    height: 180,
+    forceRefresh: false
   });
 
   var thumbKey = '_thumbnail-' + options.width + 'x' + options.height;
 
   // Return cached image if available
-  if(this[thumbKey]){
+  if(this[thumbKey] && !options.forceRefresh){
     return this[thumbKey];
   };
 
