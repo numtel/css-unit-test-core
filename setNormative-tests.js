@@ -36,6 +36,7 @@ if(Meteor.isClient){
         test.equal(result._id.length, 17);
         test.equal(result.testCase, instance._id);
         test.isTrue(result.timestamp>1400000000000);
+        test.isTrue(instance.hasNormative);
         // Clean up
         instance.remove();
       });
@@ -71,6 +72,44 @@ testAsyncMulti('CssTest - setNormative - Error', [
   }
 ]);
 
-//TODO: test setNormative adding to collection (only on server)
-//      also check that thumbnail is forced to refresh 
-//        (generate first thumbnail with diff html)
+if(Meteor.isServer){
+  // This test only on server to check mongo collection
+  testAsyncMulti('CssTest - setNormative - Inserted into Collection, New Thumb', [
+    function(test, expect){
+      var testData = _.clone(newTest);
+      var instance;
+      var origThumb;
+      var instanceCallback = function(error, result){
+        test.isFalse(error);
+        instance = result;
+        instance.getThumbnail(getThumbnailCallback);
+      };
+      var getThumbnailCallback = function(error, result){
+        test.isFalse(error);
+        test.equal(result.substr(0, 10), 'data:image');
+        origThumb = result;
+        // Provoke a new thumbnail image
+        instance.fixtureHtml = '<p>not rockin wit you</p>';
+        instance.setNormative(setNormativeCallback);
+      };
+      var setNormativeCallback = function(error, result){
+        test.isFalse(error);
+        // Check for document in collection
+        var doc = CssNormatives.findOne(result._id);
+        test.isTrue(doc);
+        test.isTrue(_.isEqual(doc, result));
+        // This call does not have the forceRefresh option set,
+        // should have happened with setNormative.
+        instance.getThumbnail(finalCallback);
+      };
+      var finalCallback = expect(function(error, result){
+        test.isFalse(error);
+        // Make sure thumbnail has changed
+        test.notEqual(result, origThumb);
+        // Clean up
+        instance.remove();
+      });
+      ServerObject('CssTest', testData, instanceCallback);
+    }
+  ]);
+};
