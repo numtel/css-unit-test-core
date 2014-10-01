@@ -22,7 +22,7 @@ page.open(url, function(status){
     console.log(output);
     phantom.exit(0);
   }else{
-    throw new Error('Failed to load remote stylesheets!');
+    console.log(new Error('Failed to load remote stylesheets!'));
     phantom.exit(1);
   };
 });
