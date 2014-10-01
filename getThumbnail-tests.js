@@ -84,18 +84,10 @@ if(Meteor.isServer){
         instance = result;
         instance.getThumbnail(getThumbnailCallback);
       };
-      var getThumbnailCallback = function(error, result){
+      var getThumbnailCallback = expect(function(error, result){
         test.isUndefined(result);
         test.isTrue(error);
         test.equal(error.error, 400);
-        // Allow 50 ms for file deletion to complete
-        Meteor.setTimeout(bufferDeleteCheck, 50);
-      };
-
-      var bufferDeleteCheck = expect(function(){
-        var fs = Npm.require('fs');
-        var htmlFile = 'testThumbnail-' + instance._id + '.html';
-        test.isFalse(fs.existsSync(htmlFile));
         // Clean up
         instance.remove();
       });

@@ -65,14 +65,9 @@ if(Meteor.isServer){
         test.isUndefined(result);
         test.isTrue(error);
         test.equal(error.error, 400);
-        // Allow 50 ms for file deletion to complete
-        Meteor.setTimeout(bufferDeleteCheck, 50);
-      });
-
-      var bufferDeleteCheck = expect(function(){
-        var fs = Npm.require('fs');
-        var htmlFile = 'test-' + instance._id + '.html';
-        test.isFalse(fs.existsSync(htmlFile));
+        if(error.error !== 400){
+          console.log(error);
+        };
         // Clean up
         instance.remove();
       });

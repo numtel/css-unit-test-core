@@ -115,6 +115,7 @@ var extendData = function(obj, data){
 };
 
 CssTest.prototype.remove = function(){
+  CssNormatives.remove({testCase: this._id});
   CssTests.remove(this._id);
 
   _.each(this, function(val, key){

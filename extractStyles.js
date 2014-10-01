@@ -3,7 +3,7 @@ CssTest.prototype.extractStyles = function(){
   var fs = Npm.require('fs');
   var fut = new Future();
 
-  var htmlFile = 'test-' + this._id + '.html';
+  var htmlFile = 'test-' + this._id + '-' + Random.id() + '.html';
   fs.writeFile(htmlFile, this.getHtml(), Meteor.bindEnvironment(function(err) {
     if(err){
       fut.throw(new Meteor.Error(500, 'Error writing HTML file'));
