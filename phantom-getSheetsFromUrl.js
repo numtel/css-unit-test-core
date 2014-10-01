@@ -20,8 +20,9 @@ page.open(url, function(status){
       return output;
     });
     console.log(output);
+    phantom.exit(0);
   }else{
-    console.log('##ERROR##');
+    throw new Error('Failed to load remote stylesheets!');
+    phantom.exit(1);
   };
-  phantom.exit();
 });

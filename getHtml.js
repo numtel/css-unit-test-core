@@ -35,8 +35,11 @@ CssTest.prototype.getHtml = function(options){
     // Styles are coming normally
     if(this.remoteStyles){
       var remoteSheets = phantomExec('phantom-getSheetsFromUrl.js', [this.remoteStyles]);
-      if(remoteSheets.substr(0,9) === '##ERROR##'){
-        throw new Meteor.Error(400, 'Error loading style sheets from remote URL.');
+      // Remote sheets will be empty string or contain tags (begins with &lt;)
+      if(typeof remoteSheets === 'string' && 
+          remoteSheets.length && 
+          remoteSheets.substr(0,1) !== '<'){
+        throw new Meteor.Error(400, remoteSheets);
       };
       styleSheets += remoteSheets;
     };

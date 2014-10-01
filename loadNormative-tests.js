@@ -72,7 +72,7 @@ testAsyncMulti('CssTest - loadNormative - By Id (Not Found)', [
     var setNormativeCallback = function(error, result){
       test.isFalse(error);
       if(error){
-        console.log(error);
+        console.log(error, error.stack);
       };
       normative = result;
       instance.loadNormative(normative._id + 'wrong', finalCallback);
