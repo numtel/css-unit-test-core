@@ -48,6 +48,8 @@ Package.onTest(function(api) {
 
   api.addFiles('csstest-mockup.html', 'client', {isAsset: true});
   api.addFiles('csstest-mockup.css', 'client', {isAsset: true});
+  api.addFiles('csstest-mockup2.html', 'client', {isAsset: true});
+  api.addFiles('csstest-mockup2.css', 'client', {isAsset: true});
 
   api.addFiles('test-init.js');
   api.addFiles('csstest-tests.js');
@@ -58,5 +60,6 @@ Package.onTest(function(api) {
   api.addFiles('extractStyles-tests.js');
   api.addFiles('setNormative-tests.js');
   api.addFiles('loadNormative-tests.js');
+  api.addFiles('run-tests-expected.js');
   api.addFiles('run-tests.js');
 });

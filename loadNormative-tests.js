@@ -114,35 +114,3 @@ testAsyncMulti('CssTest - loadNormative - Latest (Not Found)', [
     ServerObject('CssTest', testData, instanceCallback);
   }
 ]);
-
-if(Meteor.isServer){
-  testAsyncMulti('CssTest - loadNormative - Removed by CssTest.remove()', [
-    function(test, expect){
-      var testData = _.clone(newTest);
-      var instance, normativeId;
-      var instanceCallback = function(error, result){
-        test.isFalse(error);
-        instance = result;
-        instance.setNormative(setNormativeCallback);
-      };
-      var setNormativeCallback = function(error, result){
-        test.isFalse(error);
-        if(error){
-          console.log(error);
-        };
-        normativeId = result._id;
-        test.isTrue(normativeId);
-        instance.remove(removeCallback);
-      };
-      var removeCallback = expect(function(error, result){
-        test.isFalse(error);
-        if(error){
-          console.log(error);
-        };
-        var doc = CssNormatives.findOne(normativeId);
-        test.isUndefined(doc);
-      });
-      ServerObject('CssTest', testData, instanceCallback);
-    }
-  ]);
-};

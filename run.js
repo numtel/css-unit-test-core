@@ -69,18 +69,23 @@ CssTest.prototype.run = function(){
     failures: failures
   };
 
-  CssHistory.insert(report);
+  var fut = new Future();
+  CssHistory.insert(report, function(error){
+    if(error){
+      fut.throw(new Meteor.Error(500, error));
+    };
+    var metaAttr = {
+      lastPassed: report.passed,
+      lastRun: Date.now()
+    };
+    if(that.interval){
+      metaAttr.nextRun = metaAttr.lastRun + (parseInt(that.interval, 10) * 1000 * 60);
+    };
+    that._update(metaAttr);
 
-  var metaAttr = {
-    lastPassed: report.passed,
-    lastRun: Date.now()
-  };
-  if(this.interval){
-    metaAttr.nextRun = metaAttr.lastRun + (parseInt(this.interval, 10) * 1000 * 60);
-  };
-  this._update(metaAttr);
-
-  return report;
+    fut.return(report);
+  });
+  return fut.wait();
 };
 
 
