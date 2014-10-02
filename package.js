@@ -30,6 +30,7 @@ var packageContents = function(api){
   api.addFiles('extractStyles.js', 'server');
   api.addFiles('setNormative.js', 'server');
   api.addFiles('loadNormative.js', 'server');
+  api.addFiles('run.js', 'server');
 
 };
 
@@ -57,4 +58,5 @@ Package.onTest(function(api) {
   api.addFiles('extractStyles-tests.js');
   api.addFiles('setNormative-tests.js');
   api.addFiles('loadNormative-tests.js');
+  api.addFiles('run-tests.js');
 });

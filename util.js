@@ -21,24 +21,34 @@ phantomExec = function(filename, args){
   var phantomjs = Npm.require('phantomjs');
   var shell = Npm.require('child_process');
   args.unshift(assetDir + filename);
+//   args.unshift('--debug=true');
   var command = shell.spawn(phantomjs.path, args);
+  var output = '';
 
   command.stdout.on('data', Meteor.bindEnvironment(function(data){
-    if(!fut.isResolved()){
-      fut.return(String(data));
+    data = String(data);
+    if(data.substr(20,7) === '[DEBUG]'){
+      console.log(data);
+    }else{
+      output+=data + '\n';
     };
   }));
 
   command.stderr.on('data', Meteor.bindEnvironment(function(data){
-    if(!fut.isResolved()){
-      fut.throw(new Meteor.Error(500, String(data)));
+    data = String(data);
+    if(data.substr(20,7) === '[DEBUG]'){
+      console.log(data);
+    }else{
+      output+=data + '\n';
     };
   }));
 
   command.on('exit', Meteor.bindEnvironment(function(code) {
     Meteor.setTimeout(function(){
-      if(!fut.isResolved()){
-        fut.throw(new Meteor.Error(500, 'PhantomJS Error: ' + code));
+      if(code !== 0){
+        fut.throw(new Meteor.Error(400, output.trim()));
+      }else{
+        fut.return(output.trim());
       };
     }, 100);
   }));

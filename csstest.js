@@ -20,11 +20,15 @@ CssTest = function(arg){
       data[key] = arg[key];
     });
 
+    // Synchronously insert into db
+    var fut = new Future();
     CssTests.insert(data, function(error, result){
       if(error){
-        throw error;
+        fut.throw(error);
       };
+      fut.return();
     });
+    fut.wait();
   }else{
     throw new Meteor.Error(400, 'Invalid constructor argument.');
   };
@@ -115,14 +119,27 @@ var extendData = function(obj, data){
 };
 
 CssTest.prototype.remove = function(){
-  CssNormatives.remove({testCase: this._id});
-  CssTests.remove(this._id);
+  var fut = new Future();
+  var that = this;
+  CssNormatives.remove({testCase: that._id}, function(error){
+    if(error){
+      fut.throw(new Meteor.Error(500, error));
+    }else{
+      CssTests.remove(that._id, function(error){
+        if(error){
+          fut.throw(new Meteor.Error(500, error));
+        };
+        
+        _.each(that, function(val, key){
+          that[key] = undefined;
+        }, that);
 
-  _.each(this, function(val, key){
-    this[key] = undefined;
-  }, this);
-
-  this.prototype = {};
+        that.prototype = {};
+        fut.return();
+      });
+    };
+  });
+  return fut.wait();
 };
 
 // Public update function (includes field validation)
@@ -152,6 +169,13 @@ CssTest.prototype._update = function(data){
     };
   };
 
-  CssTests.update(this._id, {$set: data});
-  extendData(this, data);
+  var fut = new Future();
+  CssTests.update(this._id, {$set: data}, undefined, function(error){
+    if(error){
+      fut.throw(new Meteor.Error(500, error));
+    };
+    extendData(that, data);
+    fut.return();
+  });
+  return fut.wait();
 };

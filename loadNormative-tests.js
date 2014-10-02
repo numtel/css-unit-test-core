@@ -9,6 +9,9 @@ testAsyncMulti('CssTest - loadNormative - Default (latest normative)', [
     };
     var setNormativeCallback = function(error, result){
       test.isFalse(error);
+      if(error){
+        console.log(error);
+      };
       normative = result;
       instance.loadNormative(finalCallback);
     };
