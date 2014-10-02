@@ -20,7 +20,7 @@ phantomExec = function(filename, args){
   var fut = new Future();
   var phantomjs = Npm.require('phantomjs');
   var shell = Npm.require('child_process');
-  args.unshift(assetDir + filename);
+  args.unshift(assetDir + 'src/phantom/' + filename);
 //   args.unshift('--debug=true');
   var command = shell.spawn(phantomjs.path, args);
   var output = '';

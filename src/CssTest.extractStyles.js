@@ -9,7 +9,7 @@ CssTest.prototype.extractStyles = function(){
       fut.throw(new Meteor.Error(500, 'Error writing HTML file'));
     }else{
       try{
-        var result = phantomExec('phantom-extractStyles.js',
+        var result = phantomExec('extractStyles.js',
                                     [htmlFile, that.widthsArray.join(','), that.testUrl]);
         if(typeof result === 'string' && result.substr(0,1) !== '{'){
           throw result.trim();

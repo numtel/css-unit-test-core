@@ -11,7 +11,7 @@ if(Meteor.isClient){
         // Prepare new test with mockup css file
         testData.remoteStyles = document.location.origin +
                                 document.location.pathname +
-                                assetDir +
+                                assetDir + 'test/mockup/' +
                                 'csstest-mockup.html';
         testData.testUrl = testData.remoteStyles;
         testData.cssFiles = '';
@@ -86,6 +86,9 @@ if(Meteor.isServer){
       };
       var getThumbnailCallback = function(error, result){
         test.isFalse(error);
+        if(error){
+          console.log(error);
+        };
         test.equal(result.substr(0, 10), 'data:image');
         origThumb = result;
         // Provoke a new thumbnail image

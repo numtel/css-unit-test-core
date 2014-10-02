@@ -11,26 +11,26 @@ var packageContents = function(api){
   api.addFiles('assetKey.js', 'server', {isAsset: true});
   api.addFiles('assetKey.js', 'server');
 
-  api.addFiles('phantom-extractStyles.js', 'server', {isAsset: true});
-  api.addFiles('phantom-getSheetsFromUrl.js', 'server', {isAsset: true});
-  api.addFiles('phantom-render.js', 'server', {isAsset: true});
+  api.addFiles('src/phantom/extractStyles.js', 'server', {isAsset: true});
+  api.addFiles('src/phantom/getSheetsFromUrl.js', 'server', {isAsset: true});
+  api.addFiles('src/phantom/render.js', 'server', {isAsset: true});
 
-  api.addFiles('util.js', 'server');
-  api.addFiles('model.js');
+  api.addFiles('src/util.js', 'server');
+  api.addFiles('src/model.js');
   api.export('CssTests');
   api.export('CssNormatives', 'server');
   api.export('CssHistory');
   api.export('CssTestsHandle', 'client');
   api.export('CssHistoryHandle', 'client');
-  api.addFiles('csstest.js', 'server');
+  api.addFiles('src/CssTest.js', 'server');
   api.export('CssTest', 'server');
 
-  api.addFiles('getHtml.js', 'server');
-  api.addFiles('getThumbnail.js', 'server');
-  api.addFiles('extractStyles.js', 'server');
-  api.addFiles('setNormative.js', 'server');
-  api.addFiles('loadNormative.js', 'server');
-  api.addFiles('run.js', 'server');
+  api.addFiles('src/CssTest.getHtml.js', 'server');
+  api.addFiles('src/CssTest.getThumbnail.js', 'server');
+  api.addFiles('src/CssTest.extractStyles.js', 'server');
+  api.addFiles('src/CssTest.setNormative.js', 'server');
+  api.addFiles('src/CssTest.loadNormative.js', 'server');
+  api.addFiles('src/CssTest.run.js', 'server');
 
 };
 
@@ -42,24 +42,24 @@ Package.onUse(function(api) {
 Package.onTest(function(api) {
   api.use('tinytest');
   api.use('test-helpers');
-  api.addFiles('more-test-helpers.js');
+  api.addFiles('test/more-test-helpers.js');
   api.use('numtel:serverobject@0.0.11');
   packageContents(api);
 
-  api.addFiles('csstest-mockup.html', 'client', {isAsset: true});
-  api.addFiles('csstest-mockup.css', 'client', {isAsset: true});
-  api.addFiles('csstest-mockup2.html', 'client', {isAsset: true});
-  api.addFiles('csstest-mockup2.css', 'client', {isAsset: true});
+  api.addFiles('test/mockup/csstest-mockup.html', 'client', {isAsset: true});
+  api.addFiles('test/mockup/csstest-mockup.css', 'client', {isAsset: true});
+  api.addFiles('test/mockup/csstest-mockup2.html', 'client', {isAsset: true});
+  api.addFiles('test/mockup/csstest-mockup2.css', 'client', {isAsset: true});
 
-  api.addFiles('test-init.js');
-  api.addFiles('csstest-tests.js');
-  api.addFiles('getHtml-tests.js');
-  api.addFiles('getThumbnail-tests-expected.js');
-  api.addFiles('getThumbnail-tests.js');
-  api.addFiles('extractStyles-tests-expected.js');
-  api.addFiles('extractStyles-tests.js');
-  api.addFiles('setNormative-tests.js');
-  api.addFiles('loadNormative-tests.js');
-  api.addFiles('run-tests-expected.js');
-  api.addFiles('run-tests.js');
+  api.addFiles('test/test-init.js');
+  api.addFiles('test/CssTest.js');
+  api.addFiles('test/CssTest.getHtml.js');
+  api.addFiles('test/CssTest.getThumbnail-expected.js');
+  api.addFiles('test/CssTest.getThumbnail.js');
+  api.addFiles('test/CssTest.extractStyles-expected.js');
+  api.addFiles('test/CssTest.extractStyles.js');
+  api.addFiles('test/CssTest.setNormative.js');
+  api.addFiles('test/CssTest.loadNormative.js');
+  api.addFiles('test/CssTest.run-expected.js');
+  api.addFiles('test/CssTest.run.js');
 });

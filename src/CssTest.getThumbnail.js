@@ -24,7 +24,7 @@ CssTest.prototype.getThumbnail = function(options){
     }else{
       var result;
       try{
-        result = phantomExec('phantom-render.js',
+        result = phantomExec('render.js',
           [htmlFile, that.widthsArray[0], options.width, options.height]);
         result = String(result.trim());
         if(typeof result === 'string' && result.substr(0,10) !== 'data:image'){

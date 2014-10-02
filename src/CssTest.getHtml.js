@@ -34,7 +34,7 @@ CssTest.prototype.getHtml = function(options){
   if(options.normativeValue === undefined){
     // Styles are coming normally
     if(this.remoteStyles){
-      var remoteSheets = phantomExec('phantom-getSheetsFromUrl.js', [this.remoteStyles]);
+      var remoteSheets = phantomExec('getSheetsFromUrl.js', [this.remoteStyles]);
       // Remote sheets will be empty string or contain tags (begins with &lt;)
       if(typeof remoteSheets === 'string' && 
           remoteSheets.length && 

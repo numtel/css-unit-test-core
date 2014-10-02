@@ -44,7 +44,7 @@ if(Meteor.isClient){
             // Prepare new test with mockup css file
             testData.remoteStyles = document.location.origin +
                                     document.location.pathname +
-                                    assetDir +
+                                    assetDir + 'test/mockup/' +
                                     'csstest-mockup.html';
             testData.testUrl = testData.remoteStyles;
             testData.cssFiles = '';
