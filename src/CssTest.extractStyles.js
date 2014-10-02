@@ -8,18 +8,29 @@ CssTest.prototype.extractStyles = function(){
     if(err){
       fut.throw(new Meteor.Error(500, 'Error writing HTML file'));
     }else{
+      var result;
+      // Get styles as JSON
       try{
-        var result = phantomExec('extractStyles.js',
+        result = phantomExec('extractStyles.js',
                                     [htmlFile, that.widthsArray.join(','), that.testUrl]);
         if(typeof result === 'string' && result.substr(0,1) !== '{'){
           throw result.trim();
         };
-        var output = JSON.parse(result);
       }catch(err){
         fut.throw(new Meteor.Error(400, err));
       }finally{
         // Delete buffer file
         fs.unlink(htmlFile);
+      };
+
+      // Parse JSON
+      if(!fut.isResolved()){
+        try{
+          var output = JSON.parse(result);
+        }catch(err){
+          console.log(err, result);
+          fut.throw(new Meteor.Error(500, err));
+        };
       };
       if(!fut.isResolved()){
         fut.return(output);

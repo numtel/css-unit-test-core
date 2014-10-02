@@ -65,22 +65,13 @@ testAsyncMulti('CssTest - getHtml - Multiple Trials', [
     multipleData(test, expect, trials, function(test, data, done){
       var instance;
       var instanceCallback = function(error, result){
-        test.isFalse(error);
-        if(error){
-          done();
-          return;
-        };
+        if(error) throw error;
         instance = result;
         instance.getHtml(data.options, getHtmlCallback);
       };
 
       var getHtmlCallback = function(error, result){
-        test.isFalse(error);
-        if(error){
-          instance.remove()
-          done();
-          return;
-        };
+        if(error) throw error;
 
         // Result should include fixtureHtml exactly as long as it doesn't
         // have an html tag in it
@@ -139,6 +130,7 @@ if(Meteor.isClient){
       var testData = _.clone(newTest);
       // assetDir is only available on the server, except with method
       Meteor.call('CssTest/assetDir', function(error, result){
+        if(error) throw error;
         // Slice off leading 'assets/' not required for client
         var assetDir = result.substr(7);
 
@@ -155,15 +147,12 @@ if(Meteor.isClient){
 
       var instance;
       var instanceCallback = function(error, result){
-        test.isFalse(error);
-        if(error){
-          done();
-          return;
-        };
+        if(error) throw error;
         instance = result;
         instance.getHtml({}, getHtmlCallback);
       };
       var getHtmlCallback = expect(function(error, result){
+        if(error) throw error;
         // Should have csstest-mockup.css link
         test.include(result, 'csstest-mockup.css');
         // Should have <base> tag
@@ -180,11 +169,7 @@ testAsyncMulti('CssTest - getHtml - remoteStyles (Error)', [
   function(test, expect){
     var instance;
     var instanceCallback = function(error, result){
-      test.isFalse(error);
-      if(error){
-        done();
-        return;
-      };
+      if(error) throw error;
       instance = result;
       instance.getHtml({}, getHtmlCallback);
     };

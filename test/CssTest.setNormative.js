@@ -80,23 +80,23 @@ if(Meteor.isServer){
       var instance;
       var origThumb;
       var instanceCallback = function(error, result){
-        test.isFalse(error);
+        if(error) throw error;
         instance = result;
         instance.getThumbnail(getThumbnailCallback);
       };
       var getThumbnailCallback = function(error, result){
-        test.isFalse(error);
-        if(error){
-          console.log(error);
-        };
+        if(error) throw error;
         test.equal(result.substr(0, 10), 'data:image');
         origThumb = result;
         // Provoke a new thumbnail image
-        instance.fixtureHtml = '<p>not rockin wit you</p>';
+        instance.update({fixtureHtml: '<p>not rockin wit you</p>'}, updateCallback);
+      };
+      var updateCallback = function(error, result){
+        if(error) throw error;
         instance.setNormative(setNormativeCallback);
       };
       var setNormativeCallback = function(error, result){
-        test.isFalse(error);
+        if(error) throw error;
         // Check for document in collection
         var doc = CssNormatives.findOne(result._id);
         test.isTrue(doc);
@@ -106,7 +106,7 @@ if(Meteor.isServer){
         instance.getThumbnail(finalCallback);
       };
       var finalCallback = expect(function(error, result){
-        test.isFalse(error);
+        if(error) throw error;
         // Make sure thumbnail has changed
         test.notEqual(result, origThumb);
         // Clean up
@@ -123,24 +123,18 @@ if(Meteor.isServer){
       var testData = _.clone(newTest);
       var instance, normativeId;
       var instanceCallback = function(error, result){
-        test.isFalse(error);
+        if(error) throw error;
         instance = result;
         instance.setNormative(setNormativeCallback);
       };
       var setNormativeCallback = function(error, result){
-        test.isFalse(error);
-        if(error){
-          console.log(error);
-        };
+        if(error) throw error;
         normativeId = result._id;
         test.isTrue(normativeId);
         instance.remove(removeCallback);
       };
       var removeCallback = expect(function(error, result){
-        test.isFalse(error);
-        if(error){
-          console.log(error);
-        };
+        if(error) throw error;
         var doc = CssNormatives.findOne(normativeId);
         test.isUndefined(doc);
       });

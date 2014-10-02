@@ -43,7 +43,7 @@ Package.onTest(function(api) {
   api.use('tinytest');
   api.use('test-helpers');
   api.addFiles('test/more-test-helpers.js');
-  api.use('numtel:serverobject@0.0.11');
+  api.use('numtel:serverobject@0.0.14');
   packageContents(api);
 
   api.addFiles('test/mockup/csstest-mockup.html', 'client', {isAsset: true});

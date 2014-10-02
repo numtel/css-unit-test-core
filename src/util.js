@@ -30,7 +30,7 @@ phantomExec = function(filename, args){
     if(data.substr(20,7) === '[DEBUG]'){
       console.log(data);
     }else{
-      output+=data + '\n';
+      output+=data;
     };
   }));
 
@@ -39,7 +39,7 @@ phantomExec = function(filename, args){
     if(data.substr(20,7) === '[DEBUG]'){
       console.log(data);
     }else{
-      output+=data + '\n';
+      output+=data;
     };
   }));
 

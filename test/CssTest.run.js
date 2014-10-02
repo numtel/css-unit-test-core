@@ -22,30 +22,31 @@ if(Meteor.isClient){
 
       var instance, normative;
       var instanceCallback = function(error, result){
-        test.isFalse(error);
-        if(error){
-          done();
-          return;
-        };
+        if(error) throw error;
         instance = result;
         instance.setNormative(setNormativeCallback);
       };
       var setNormativeCallback = function(error, result){
-        test.isFalse(error);
+        if(error) throw error;
         normative = result;
         // Switch to other mockup and run test
-        instance.remoteStyles = instance.remoteStyles.replace('.html', '2.html');
+        var mockup2 = instance.remoteStyles.replace('.html', '2.html');
+        instance.update({remoteStyles: mockup2}, updateCallback);
+      };
+      var updateCallback = function(error, result){
+        if(error) throw error;
         instance.run(runCallback);
       };
       var runCallback = expect(function(error, result){
+        if(error) throw error;
         var cssFile1 = instance.remoteStyles.replace('2.html', '.css'),
             cssFile2 = instance.remoteStyles.replace('.html', '.css'),
             expected = expectedRunFailures(cssFile1, cssFile2);
-        test.isFalse(error);
         test.isTrue(_.isEqual(expected, result.failures));
         test.equal(result.fixtureHtml, instance.fixtureHtml);
         test.equal(result.owner, instance.owner);
         test.equal(result.testCase, instance._id);
+        test.equal(result.normative, normative._id);
         test.isTrue(result.time);
         test.isFalse(result.passed);
         // Clean up
@@ -61,22 +62,18 @@ if(Meteor.isServer){
     function(test, expect){
       var instance, normative, report;
       var instanceCallback = function(error, result){
-        test.isFalse(error);
-        if(error){
-          done();
-          return;
-        };
+        if(error) throw error;
         instance = result;
         instance.setNormative(setNormativeCallback);
       };
       var setNormativeCallback = function(error, result){
-        test.isFalse(error);
+        if(error) throw error;
         normative = result;
         // Switch to other mockup and run test
         instance.run(runCallback);
       };
       var runCallback = function(error, result){
-        test.isFalse(error);
+        if(error) throw error;
         report = result;
         test.equal(report.fixtureHtml, instance.fixtureHtml);
         test.equal(report.owner, instance.owner);
@@ -93,10 +90,7 @@ if(Meteor.isServer){
         instance.remove(removeCallback);
       };
       var removeCallback = expect(function(error, result){
-        test.isFalse(error);
-        if(error){
-          console.log(error);
-        };
+        if(error) throw error;
         var doc = CssHistory.findOne(report._id);
         test.isUndefined(doc);
       });
@@ -111,11 +105,7 @@ testAsyncMulti('CssTest - run - Error', [
   function(test, expect){
     var instance;
     var instanceCallback = function(error, result){
-      test.isFalse(error);
-      if(error){
-        done();
-        return;
-      };
+      if(error) throw error;
       instance = result;
       instance.run(runCallback);
     };

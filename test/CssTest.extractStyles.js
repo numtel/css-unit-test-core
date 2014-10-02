@@ -25,10 +25,7 @@ if(Meteor.isClient){
 
       var instance;
       var instanceCallback = function(error, result){
-        test.isFalse(error);
-        if(error){
-          return;
-        };
+        if(error) throw error;
         instance = result;
         instance.extractStyles(extractStylesCallback);
       };
@@ -51,10 +48,7 @@ if(Meteor.isServer){
     function(test, expect){
       var instance;
       var instanceCallback = function(error, result){
-        test.isFalse(error);
-        if(error){
-          return;
-        };
+        if(error) throw error;
         instance = result;
         instance.extractStyles(extractStylesCallback);
       };

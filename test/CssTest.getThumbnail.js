@@ -20,6 +20,7 @@ if(Meteor.isClient){
       multipleData(test, expect, trials, function(test, data, done){
         // Must be placed before
         var getThumbnailCallback = function(error, result){
+          if(error) throw error;
           test.equal(expectedThumbnails[data.expected], result);
           if(data.last){
             // Clean up
@@ -53,11 +54,7 @@ if(Meteor.isClient){
           });
 
           var instanceCallback = function(error, result){
-            test.isFalse(error);
-            if(error){
-              done();
-              return;
-            };
+            if(error) throw error;
             instance = result;
             instance.getThumbnail(data.options, getThumbnailCallback);
           };
@@ -76,11 +73,7 @@ if(Meteor.isServer){
     function(test, expect){
       var instance;
       var instanceCallback = function(error, result){
-        test.isFalse(error);
-        if(error){
-          done();
-          return;
-        };
+        if(error) throw error;
         instance = result;
         instance.getThumbnail(getThumbnailCallback);
       };
