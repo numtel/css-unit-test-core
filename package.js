@@ -1,6 +1,6 @@
 Package.describe({
   summary: "Css Unit Test Core Package",
-  version: "0.0.1",
+  version: "0.0.2",
   git: "https://github.com/numtel/css-unit-test-core.git"
 });
 
@@ -43,7 +43,7 @@ Package.onTest(function(api) {
   api.use('tinytest');
   api.use('test-helpers');
   api.addFiles('test/more-test-helpers.js');
-  api.use('numtel:serverobject@0.0.14');
+  api.use('numtel:serverobject@0.0.15');
   packageContents(api);
 
   api.addFiles('test/mockup/csstest-mockup.html', 'client', {isAsset: true});
